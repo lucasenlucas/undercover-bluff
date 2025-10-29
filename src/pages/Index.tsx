@@ -110,14 +110,18 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-5xl font-bold text-primary mb-2">
-            Undercover Talk
-          </h1>
-          <p className="text-muted-foreground">
-            Wie is de imposter? 🤔
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+      
+      <Card className="w-full max-w-md p-8 space-y-8 relative z-10 animate-float-slow shadow-2xl border-primary/20">
+        <div className="text-center space-y-4">
+          <div className="animate-float">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3">
+              Undercover Talk
+            </h1>
+          </div>
+          <p className="text-lg text-muted-foreground animate-fade-in">
+            Wie is de imposter? 😈🤔
           </p>
         </div>
 
@@ -126,14 +130,14 @@ const Index = () => {
             placeholder="Je naam"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="text-lg"
+            className="text-lg transition-all duration-300 focus:scale-105 focus:shadow-lg"
             disabled={loading}
           />
 
           <Button
             onClick={createGame}
             disabled={loading}
-            className="w-full"
+            className="w-full bg-gradient-to-r from-primary to-accent hover:shadow-xl hover:scale-105 transition-all duration-300"
             size="lg"
           >
             {loading ? (
@@ -159,7 +163,7 @@ const Index = () => {
             placeholder="Game Code"
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-            className="text-lg text-center font-mono"
+            className="text-lg text-center font-mono transition-all duration-300 focus:scale-105 focus:shadow-lg"
             disabled={loading}
             maxLength={6}
           />
@@ -168,7 +172,7 @@ const Index = () => {
             onClick={joinGame}
             disabled={loading}
             variant="secondary"
-            className="w-full"
+            className="w-full hover:shadow-xl hover:scale-105 transition-all duration-300"
             size="lg"
           >
             {loading ? (

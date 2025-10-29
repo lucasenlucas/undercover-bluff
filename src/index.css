@@ -44,6 +44,10 @@ All colors MUST be HSL.
 
     --radius: 1rem;
 
+    --gradient-imposter: linear-gradient(135deg, hsl(0 72% 51%), hsl(22 85% 58%));
+    --gradient-regular: linear-gradient(135deg, hsl(140 65% 48%), hsl(160 70% 45%));
+    --gradient-hero: linear-gradient(135deg, hsl(22 85% 58%), hsl(30 90% 65%));
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -82,5 +86,53 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes float-slow {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(2deg);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(255, 107, 53, 0.6);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 4s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 }

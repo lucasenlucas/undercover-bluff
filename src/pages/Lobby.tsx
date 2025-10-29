@@ -225,14 +225,16 @@ const Lobby = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 flex items-center justify-center">
-      <Card className="w-full max-w-md p-8 space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">Lobby</h1>
-          <div className="flex items-center justify-center gap-2">
-            <p className="text-2xl font-mono text-primary">{gameCode}</p>
-            <Button variant="ghost" size="sm" onClick={copyCode}>
-              <Copy className="h-4 w-4" />
+    <div className="min-h-screen bg-background p-4 flex items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+      
+      <Card className="w-full max-w-md p-8 space-y-6 relative z-10 animate-float-slow shadow-2xl">
+        <div className="text-center space-y-3">
+          <h1 className="text-5xl font-bold text-foreground animate-float">Lobby</h1>
+          <div className="flex items-center justify-center gap-2 animate-pulse-glow p-4 bg-primary/10 rounded-lg">
+            <p className="text-3xl font-mono text-primary font-bold">{gameCode}</p>
+            <Button variant="ghost" size="sm" onClick={copyCode} className="hover:scale-110 transition-transform">
+              <Copy className="h-5 w-5" />
             </Button>
           </div>
         </div>
@@ -243,21 +245,22 @@ const Lobby = () => {
             <span className="font-semibold">Spelers ({players.length})</span>
           </div>
 
-          {players.map((player) => (
+          {players.map((player, index) => (
             <Card
               key={player.id}
-              className="p-3 flex items-center justify-between bg-card/50"
+              className="p-4 flex items-center justify-between bg-card/50 hover:bg-card/70 hover:scale-105 transition-all duration-300 hover:shadow-lg"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <div
-                  className={`w-3 h-3 rounded-full ${
-                    player.is_connected ? "bg-secondary" : "bg-muted"
+                  className={`w-4 h-4 rounded-full animate-pulse ${
+                    player.is_connected ? "bg-secondary shadow-lg shadow-secondary/50" : "bg-muted"
                   }`}
                 />
-                <span className="text-foreground font-medium">{player.name}</span>
+                <span className="text-foreground font-semibold text-lg">{player.name}</span>
               </div>
               {game?.host_id === player.id && (
-                <Crown className="h-4 w-4 text-primary" />
+                <Crown className="h-5 w-5 text-primary animate-float" />
               )}
             </Card>
           ))}
@@ -273,16 +276,16 @@ const Lobby = () => {
           <Button
             onClick={startGame}
             disabled={players.length < 3 || starting}
-            className="w-full"
+            className="w-full bg-gradient-to-r from-primary to-accent hover:shadow-2xl hover:scale-105 transition-all duration-300 text-lg"
             size="lg"
           >
             {starting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                 Starten...
               </>
             ) : (
-              "Start Game"
+              "Start Game 🚀"
             )}
           </Button>
         )}

@@ -80,35 +80,40 @@ const Results = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background p-4 flex items-center justify-center">
-      <Card className="w-full max-w-md p-8 space-y-6">
-        <div className="text-center space-y-2">
-          <Trophy className="h-16 w-16 text-primary mx-auto mb-4" />
-          <h1 className="text-4xl font-bold text-foreground">Game Over!</h1>
+    <div className="min-h-screen bg-background p-4 flex items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+      
+      <Card className="w-full max-w-md p-8 space-y-6 relative z-10 animate-float-slow shadow-2xl">
+        <div className="text-center space-y-4">
+          <Trophy className="h-20 w-20 text-primary mx-auto mb-4 animate-float" />
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+            Game Over!
+          </h1>
         </div>
 
         <div className="space-y-4">
-          <Card className="p-6 bg-card/50">
-            <p className="text-sm text-muted-foreground mb-2">Onderwerp was:</p>
-            <h2 className="text-3xl font-bold text-foreground mb-3">
+          <Card className="p-8 bg-gradient-to-br from-primary/20 to-accent/10 border-2 border-primary/30 hover:scale-105 transition-all duration-300 shadow-xl animate-pulse-glow">
+            <p className="text-sm text-muted-foreground mb-3">Onderwerp was:</p>
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               {game?.topic}
             </h2>
-            <p className="text-sm text-muted-foreground mb-2">Item was:</p>
-            <h3 className="text-2xl font-bold text-primary">{game?.item}</h3>
+            <p className="text-sm text-muted-foreground mb-3">Item was:</p>
+            <h3 className="text-3xl font-bold text-primary animate-float">{game?.item}</h3>
           </Card>
 
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-imposter flex items-center gap-2">
+            <h3 className="text-xl font-bold text-imposter flex items-center gap-2 animate-float">
               😈 Imposters
             </h3>
-            {imposterPlayers.map((player) => (
+            {imposterPlayers.map((player, index) => (
               <Card
                 key={player.id}
-                className="p-3 bg-imposter/20 border-imposter/50"
+                className="p-4 bg-gradient-to-r from-imposter/30 to-imposter/10 border-2 border-imposter/50 hover:scale-105 hover:shadow-xl transition-all duration-300"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-imposter" />
-                  <span className="font-medium text-foreground">
+                <div className="flex items-center gap-3">
+                  <User className="h-5 w-5 text-imposter" />
+                  <span className="font-semibold text-foreground text-lg">
                     {player.name}
                   </span>
                 </div>
@@ -117,17 +122,18 @@ const Results = () => {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-regular flex items-center gap-2">
+            <h3 className="text-xl font-bold text-regular flex items-center gap-2 animate-float">
               🎯 Spelers
             </h3>
-            {regularPlayers.map((player) => (
+            {regularPlayers.map((player, index) => (
               <Card
                 key={player.id}
-                className="p-3 bg-regular/20 border-regular/50"
+                className="p-4 bg-gradient-to-r from-regular/30 to-regular/10 border-2 border-regular/50 hover:scale-105 hover:shadow-xl transition-all duration-300"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-regular" />
-                  <span className="font-medium text-foreground">
+                <div className="flex items-center gap-3">
+                  <User className="h-5 w-5 text-regular" />
+                  <span className="font-semibold text-foreground text-lg">
                     {player.name}
                   </span>
                 </div>
@@ -136,8 +142,8 @@ const Results = () => {
           </div>
         </div>
 
-        <Button onClick={() => navigate("/")} className="w-full" size="lg">
-          Nieuw Spel
+        <Button onClick={() => navigate("/")} className="w-full bg-gradient-to-r from-primary to-accent hover:shadow-2xl hover:scale-105 transition-all duration-300 text-lg" size="lg">
+          Nieuw Spel 🎮
         </Button>
       </Card>
     </div>
