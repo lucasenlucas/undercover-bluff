@@ -226,15 +226,13 @@ const Lobby = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 flex items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
-      
-      <Card className="w-full max-w-md p-8 space-y-6 relative z-10 animate-float-slow shadow-2xl">
+    <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+      <Card className="w-full max-w-md p-8 space-y-6 shadow-lg border">
         <div className="text-center space-y-3">
-          <h1 className="text-5xl font-bold text-foreground animate-float">The Imposter Challenge</h1>
-          <div className="flex items-center justify-center gap-2 animate-pulse-glow p-4 bg-primary/10 rounded-lg">
+          <h1 className="text-4xl font-bold text-foreground">The Imposter Challenge</h1>
+          <div className="flex items-center justify-center gap-2 p-4 bg-primary/10 rounded-lg">
             <p className="text-3xl font-mono text-primary font-bold">{gameCode}</p>
-            <Button variant="ghost" size="sm" onClick={copyCode} className="hover:scale-110 transition-transform">
+            <Button variant="ghost" size="sm" onClick={copyCode}>
               <Copy className="h-5 w-5" />
             </Button>
           </div>
@@ -246,22 +244,21 @@ const Lobby = () => {
             <span className="font-semibold">Spelers ({players.length})</span>
           </div>
 
-          {players.map((player, index) => (
+          {players.map((player) => (
             <Card
               key={player.id}
-              className="p-4 flex items-center justify-between bg-card/50 hover:bg-card/70 hover:scale-105 transition-all duration-300 hover:shadow-lg"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="p-4 flex items-center justify-between"
             >
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-4 h-4 rounded-full animate-pulse ${
-                    player.is_connected ? "bg-secondary shadow-lg shadow-secondary/50" : "bg-muted"
+                  className={`w-3 h-3 rounded-full ${
+                    player.is_connected ? "bg-secondary" : "bg-muted"
                   }`}
                 />
-                <span className="text-foreground font-semibold text-lg">{player.name}</span>
+                <span className="text-foreground font-medium">{player.name}</span>
               </div>
               {game?.host_id === player.id && (
-                <Crown className="h-5 w-5 text-primary animate-float" />
+                <Crown className="h-5 w-5 text-primary" />
               )}
             </Card>
           ))}
@@ -277,7 +274,7 @@ const Lobby = () => {
           <Button
             onClick={startGame}
             disabled={players.length < 3 || starting}
-            className="w-full bg-gradient-to-r from-primary to-accent hover:shadow-2xl hover:scale-105 transition-all duration-300 text-lg"
+            className="w-full"
             size="lg"
           >
             {starting ? (
