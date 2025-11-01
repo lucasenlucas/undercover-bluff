@@ -139,14 +139,14 @@ const Game = () => {
                   😈 IMPOSTER
                 </h2>
                 <div className="space-y-3 bg-background/50 p-4 rounded-lg">
-                  <p className="text-sm text-muted-foreground">Onderwerp:</p>
+                  <p className="text-sm text-muted-foreground">Je weet alleen:</p>
                   <p className="text-3xl font-bold text-foreground">
                     {game?.topic}
                   </p>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground animate-fade-in">
-                Je kent alleen het onderwerp. Probeer niet op te vallen!
+                Je kent NIET het specifieke item. Probeer niet op te vallen!
               </p>
             </div>
           ) : (

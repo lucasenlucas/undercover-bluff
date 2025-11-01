@@ -87,7 +87,7 @@ const Results = () => {
         <div className="text-center space-y-4">
           <Trophy className="h-20 w-20 text-primary mx-auto mb-4 animate-float" />
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-            Game Over!
+            Challenge Complete!
           </h1>
         </div>
 

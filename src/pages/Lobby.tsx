@@ -192,9 +192,10 @@ const Lobby = () => {
       const randomTopic = allTopics[Math.floor(Math.random() * allTopics.length)];
       const randomItem = randomTopic.items[Math.floor(Math.random() * randomTopic.items.length)];
 
-      // Select 2 random imposters
+      // Select imposters based on player count (1 for 3 players, 2 for 4+)
+      const imposterCount = players.length === 3 ? 1 : 2;
       const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
-      const imposterIds = shuffledPlayers.slice(0, 2).map((p) => p.id);
+      const imposterIds = shuffledPlayers.slice(0, imposterCount).map((p) => p.id);
 
       // Update game
       await supabase
@@ -230,7 +231,7 @@ const Lobby = () => {
       
       <Card className="w-full max-w-md p-8 space-y-6 relative z-10 animate-float-slow shadow-2xl">
         <div className="text-center space-y-3">
-          <h1 className="text-5xl font-bold text-foreground animate-float">Lobby</h1>
+          <h1 className="text-5xl font-bold text-foreground animate-float">The Imposter Challenge</h1>
           <div className="flex items-center justify-center gap-2 animate-pulse-glow p-4 bg-primary/10 rounded-lg">
             <p className="text-3xl font-mono text-primary font-bold">{gameCode}</p>
             <Button variant="ghost" size="sm" onClick={copyCode} className="hover:scale-110 transition-transform">

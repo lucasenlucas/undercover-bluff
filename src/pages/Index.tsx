@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -112,12 +113,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
       
       <Card className="w-full max-w-md p-8 space-y-8 relative z-10 animate-float-slow shadow-2xl border-primary/20">
         <div className="text-center space-y-4">
           <div className="animate-float">
             <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3">
-              Undercover Talk
+              The Imposter Challenge
             </h1>
           </div>
           <p className="text-lg text-muted-foreground animate-fade-in">
@@ -188,7 +192,7 @@ const Index = () => {
 
         <div className="text-center text-sm text-muted-foreground space-y-1">
           <p>🎯 Minimaal 3 spelers nodig</p>
-          <p>😈 2 imposters per game</p>
+          <p>😈 1-2 imposters (afhankelijk van spelers)</p>
         </div>
       </Card>
     </div>
