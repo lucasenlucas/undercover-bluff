@@ -39,6 +39,7 @@ export type Database = {
         Row: {
           code: string
           created_at: string
+          current_round: number
           host_id: string
           id: string
           imposters: Json | null
@@ -50,6 +51,7 @@ export type Database = {
         Insert: {
           code: string
           created_at?: string
+          current_round?: number
           host_id: string
           id?: string
           imposters?: Json | null
@@ -61,6 +63,7 @@ export type Database = {
         Update: {
           code?: string
           created_at?: string
+          current_round?: number
           host_id?: string
           id?: string
           imposters?: Json | null
