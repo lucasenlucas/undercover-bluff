@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Copy, Users, Crown } from "lucide-react";
+import { Loader2, Copy, Users, Crown, X } from "lucide-react";
 
 interface Player {
   id: string;
@@ -169,6 +169,29 @@ const Lobby = () => {
     });
   };
 
+  const kickPlayer = async (playerId: string) => {
+    if (!game) return;
+
+    try {
+      await supabase
+        .from("players")
+        .delete()
+        .eq("id", playerId);
+
+      toast({
+        title: "Speler verwijderd",
+        description: "De speler is uit het spel gekickt",
+      });
+    } catch (error) {
+      console.error("Error kicking player:", error);
+      toast({
+        title: "Fout",
+        description: "Kon speler niet verwijderen",
+        variant: "destructive",
+      });
+    }
+  };
+
   const startGame = async () => {
     if (!game || players.length < 3) {
       toast({
@@ -244,10 +267,11 @@ const Lobby = () => {
             <span className="font-semibold">Spelers ({players.length})</span>
           </div>
 
-          {players.map((player) => (
+          {players.map((player, index) => (
             <Card
               key={player.id}
-              className="p-4 flex items-center justify-between"
+              className="p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="flex items-center gap-3">
                 <div
@@ -257,9 +281,21 @@ const Lobby = () => {
                 />
                 <span className="text-foreground font-medium">{player.name}</span>
               </div>
-              {game?.host_id === player.id && (
-                <Crown className="h-5 w-5 text-primary" />
-              )}
+              <div className="flex items-center gap-2">
+                {game?.host_id === player.id && (
+                  <Crown className="h-5 w-5 text-primary" />
+                )}
+                {isHost && game?.host_id !== player.id && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => kickPlayer(player.id)}
+                    className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             </Card>
           ))}
         </div>
