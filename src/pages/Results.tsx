@@ -3,14 +3,18 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { Loader2, Trophy, User } from "lucide-react";
+import RoundTransition from "@/components/RoundTransition";
 
 interface Game {
   id: string;
   code: string;
+  host_id: string;
   topic: string;
   item: string;
   imposters: any;
+  current_round: number;
 }
 
 interface Player {
@@ -21,11 +25,16 @@ interface Player {
 const Results = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [game, setGame] = useState<Game | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
+  const [startingNewRound, setStartingNewRound] = useState(false);
+  const [showTransition, setShowTransition] = useState(false);
 
   const gameCode = searchParams.get("code");
+  const playerName = searchParams.get("name");
+  const isHost = searchParams.get("host") === "true";
 
   useEffect(() => {
     if (!gameCode) {
@@ -35,6 +44,33 @@ const Results = () => {
 
     loadResults();
   }, [gameCode]);
+
+  useEffect(() => {
+    if (!game) return;
+
+    // Subscribe to game changes for non-host players
+    const channel = supabase
+      .channel(`game-results-${game.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "games",
+          filter: `id=eq.${game.id}`,
+        },
+        (payload: any) => {
+          if (payload.new.status === "playing") {
+            setShowTransition(true);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [game]);
 
   const loadResults = async () => {
     try {
@@ -63,11 +99,94 @@ const Results = () => {
     }
   };
 
+  const startNewRound = async () => {
+    if (!game) return;
+
+    setStartingNewRound(true);
+
+    try {
+      // Get random topic and item
+      const { data: allTopics } = await supabase.from("game_data").select("*");
+
+      if (!allTopics || allTopics.length === 0) {
+        throw new Error("No game data found");
+      }
+
+      const randomTopic = allTopics[Math.floor(Math.random() * allTopics.length)];
+      const randomItem = randomTopic.items[Math.floor(Math.random() * randomTopic.items.length)];
+
+      // Select imposters based on player count
+      const imposterCount = players.length === 3 ? 1 : 2;
+      const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
+      const imposterIds = shuffledPlayers.slice(0, imposterCount).map((p) => p.id);
+
+      // Update game with new round
+      await supabase
+        .from("games")
+        .update({
+          status: "playing",
+          topic: randomTopic.topic,
+          item: randomItem,
+          imposters: imposterIds,
+          current_round: game.current_round + 1,
+        })
+        .eq("id", game.id);
+
+      // Show transition
+      setShowTransition(true);
+    } catch (error) {
+      console.error("Error starting new round:", error);
+      toast({
+        title: "Fout bij starten",
+        variant: "destructive",
+      });
+      setStartingNewRound(false);
+    }
+  };
+
+  const closeGame = async () => {
+    if (!game) return;
+
+    try {
+      await supabase
+        .from("games")
+        .delete()
+        .eq("id", game.id);
+
+      toast({
+        title: "Spel gesloten",
+        description: "Het spel is succesvol beëindigd",
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.error("Error closing game:", error);
+      toast({
+        title: "Fout",
+        description: "Kon spel niet sluiten",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleTransitionComplete = () => {
+    navigate(`/game?code=${gameCode}&name=${playerName}&host=${isHost}`);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
+    );
+  }
+
+  if (showTransition && game) {
+    return (
+      <RoundTransition 
+        round={game.current_round + 1} 
+        onComplete={handleTransitionComplete} 
+      />
     );
   }
 
@@ -138,9 +257,40 @@ const Results = () => {
           </div>
         </div>
 
-        <Button onClick={() => navigate("/")} className="w-full" size="lg">
-          Nieuw Spel 🎮
-        </Button>
+        <div className="space-y-3">
+          {isHost && (
+            <>
+              <Button 
+                onClick={startNewRound} 
+                disabled={startingNewRound}
+                className="w-full" 
+                size="lg"
+              >
+                {startingNewRound ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Voorbereiden...
+                  </>
+                ) : (
+                  "Nieuwe Ronde 🔄"
+                )}
+              </Button>
+              <Button 
+                onClick={closeGame} 
+                variant="destructive" 
+                className="w-full" 
+                size="lg"
+              >
+                Spel Sluiten
+              </Button>
+            </>
+          )}
+          {!isHost && (
+            <Button onClick={() => navigate("/")} className="w-full" size="lg">
+              Nieuw Spel 🎮
+            </Button>
+          )}
+        </div>
       </Card>
     </div>
   );
