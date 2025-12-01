@@ -154,33 +154,25 @@ const Game = () => {
                 <h2 className="text-4xl font-bold text-regular mb-4">
                   🎯 SPELER
                 </h2>
-                <div className="space-y-3 bg-background/50 p-4 rounded-lg">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Onderwerp:</p>
-                    <p className="text-xl font-bold text-foreground">
-                      {game?.topic}
-                    </p>
-                  </div>
-                  <div className="pt-2 border-t border-border">
-                    <p className="text-sm text-muted-foreground mb-2">Item:</p>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => setRevealed(!revealed)}
-                    >
-                      {revealed ? (
-                        <>
-                          <EyeOff className="mr-2 h-4 w-4" />
-                          <span className="font-bold">{game?.item}</span>
-                        </>
-                      ) : (
-                        <>
-                          <Eye className="mr-2 h-4 w-4" />
-                          Klik om te zien
-                        </>
-                      )}
-                    </Button>
-                  </div>
+                <div className="space-y-2 bg-background/50 p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground">Jouw item:</p>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setRevealed(!revealed)}
+                  >
+                    {revealed ? (
+                      <>
+                        <EyeOff className="mr-2 h-4 w-4" />
+                        <span className="font-bold text-xl">{game?.item}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="mr-2 h-4 w-4" />
+                        Klik om te zien
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground text-center">
